@@ -23,6 +23,6 @@ ProxyServer/custom_handler/
 
 现在这个proxy server已经实现了最基本的内容转发代理，可以把转发端口的response完整地返回给代理端口，也可以进行二次开发，目前提供二次开发入口，若需要更复杂的转发或者需要适配特定项目需求的转发，
 只需要修改ProxyServer/custom_handler/目录下的my_handler.py脚本的代码，修改MyHandler class中的静态方法on_response_handle(),在此方法中实现自己的需求即可，这个函数的实现可参考MyHandler class中的on_response_handle()函数。
-还可以重写MyHandler class中的get()、post()、和put()等方法，实现过滤request的需求。
+还可以重写MyHandler class中的get()、post()、和put()等方法，然后在入口proxy_server.py脚本中，修改tornado的监听的RequestHandler为MyHandler,实现过滤request的需求。
 
 
