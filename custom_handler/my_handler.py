@@ -59,4 +59,4 @@ class MyHandler(proxy_handler.ProxyHandler):
 
     @tornado.web.asynchronous
     def post(self):
-        super(MyHandler, self).get()
+        super(MyHandler, self).post()
