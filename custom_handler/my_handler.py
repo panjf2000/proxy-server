@@ -52,3 +52,11 @@ class MyHandler(proxy_handler.ProxyHandler):
             if response.body:
                 self.write(response.body)
         self.finish()
+
+    @tornado.web.asynchronous
+    def get(self):
+        super(MyHandler, self).get()
+
+    @tornado.web.asynchronous
+    def post(self):
+        super(MyHandler, self).get()
