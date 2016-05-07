@@ -44,10 +44,8 @@ def get_proxy(url):
 
 
 def base_auth_valid(auth_header, base_auth_user, base_auth_passwd):
-    # Basic Zm9vOmJhcg==
     auth_mode, auth_base64 = auth_header.split(' ', 1)
     assert auth_mode == 'Basic'
-    # 'Zm9vOmJhcg==' == base64("foo:bar")
     auth_username, auth_password = auth_base64.decode('base64').split(':', 1)
     if auth_username == base_auth_user and auth_password == base_auth_passwd:
         return True
@@ -75,24 +73,15 @@ def shield_attack(header):
 
 
 def fetch_request(request, t_port, callback, **kwargs):
-    # proxy = get_proxy(url)
-    # print 'proxy is %s' % proxy
-    # global t_port
     if request and isinstance(request, HTTPServerRequest):
-        # logger.debug('Forward request via upstream proxy %s', proxy)
         tornado.httpclient.AsyncHTTPClient.configure(
             'tornado.curl_httpclient.CurlAsyncHTTPClient')
-        # host, port = parse_proxy(proxy)
         protocol = request.protocol
         port_index = request.host.index(':')
         host = request.host[:port_index]
-        # port = t_port
         port = '' if t_port == 80 else ":%s" % t_port
         uri = request.uri
         url = '%s://%s%s%s' % (protocol, host, port, uri)
-        # kwargs['proxy_host'] = host
-        # kwargs['proxy_port'] = options.port
-
         req = tornado.httpclient.HTTPRequest(url, **kwargs)
         client = tornado.httpclient.AsyncHTTPClient()
         client.fetch(req, callback, follow_redirects=True, max_redirects=3)
