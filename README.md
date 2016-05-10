@@ -13,7 +13,9 @@ a proxy server by python
 
 结构：
 ProxyServer/proxy_server.py        #server入口
+
 ProxyServer/handler/               #tornado的转发类，负责转发请求以及处理response的数据
+
 ProxyServer/custom_handler/        
 
 二次开发：
