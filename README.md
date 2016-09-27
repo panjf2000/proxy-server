@@ -6,10 +6,36 @@ a proxy server by python
 依赖：python2.7或者python3.5，tornado4.x
 
 安装：git clone git@github.com:panjf2000/ProxyServer.git
+安装 hash_ring: pip install hash_ring
 
-运行：python proxy_server.py -p 8888 -tp 80
+编写配置文件:
+{
+  "port": "1234",
+  "proxy_pass": [
+    "127.0.0.1:80",
+    "127.0.0.1:8080",
+    "127.0.0.1:8088",
+    "127.0.0.1:8888"
+  ],
+  "auth": false,
+  "mode": 0,
+  "user": {
+    "name": "proxy",
+    "passwd": "secret"
+  },
+  "white_iplist": []
+}
 
--p参数代表代理端口（即proxy server要监听的端口），-tp参数代表转发端口（即proxy server实际转发到的端口）
+配置文件释义:
+port           # proxy server监听的端口
+proxy_pass     # 反向代理的服务器
+auth           # 是否开启代理认证
+mode           # 负载策略的模式,目前支持:IP HASH-0 ; 随机选取-1
+user           # 代理认证的用户信息
+white_iplist   # 白名单,若设置,则只有该名单内的ip方可使用此代理服务器
+
+运行：python proxy_server.py
+
 
 结构：
 
