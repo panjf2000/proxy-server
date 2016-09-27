@@ -18,6 +18,7 @@ import os
 import socket
 import json
 import re
+import random
 import tornado.httpclient
 import tornado.httpserver
 import tornado.ioloop
@@ -25,6 +26,7 @@ import tornado.iostream
 import tornado.web
 from tornado.httputil import HTTPServerRequest
 from urlparse import urlparse
+from hash_ring import *
 
 
 def is_json(json_str):
@@ -72,16 +74,21 @@ def shield_attack(header):
     return False
 
 
-def fetch_request(request, t_port, callback, **kwargs):
+def fetch_request(request, client_ip, proxy_pass, mode, callback, **kwargs):
     if request and isinstance(request, HTTPServerRequest):
         tornado.httpclient.AsyncHTTPClient.configure(
             'tornado.curl_httpclient.CurlAsyncHTTPClient')
         protocol = request.protocol
-        port_index = request.host.index(':')
-        host = request.host[:port_index]
-        port = '' if t_port == 80 else ":%s" % t_port
+        if mode == 0:
+            ring = HashRing(proxy_pass)
+            server = ring.get_node(client_ip)
+        elif mode == 1:
+            index = random.randint(0, len(proxy_pass) - 1)
+            server = proxy_pass[index]
+        else:
+            pass
         uri = request.uri
-        url = '%s://%s%s%s' % (protocol, host, port, uri)
+        url = '%s://%s%s' % (protocol, server, uri)
         req = tornado.httpclient.HTTPRequest(url, **kwargs)
         client = tornado.httpclient.AsyncHTTPClient()
         client.fetch(req, callback, follow_redirects=True, max_redirects=3)
@@ -89,14 +96,18 @@ def fetch_request(request, t_port, callback, **kwargs):
 
 class ProxyHandler(tornado.web.RequestHandler):
     SUPPORTED_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'CONNECT']
-    set_port = 80
+    set_auth = False
     set_user = ''
     set_pwd = ''
     set_white_iplist = ''
+    set_proxy_pass = list()
+    set_mode = 0
 
     @classmethod
-    def set_static_args(cls, port, user, passwd, white_iplist, on_response=None):
-        cls.set_port = port
+    def set_static_args(cls, proxy_pass, mode, auth, user, passwd, white_iplist, on_response=None):
+        cls.set_proxy_pass = proxy_pass
+        cls.set_mode = mode
+        cls.set_auth = auth
         cls.set_user = user
         cls.set_pwd = passwd
         cls.set_white_iplist = white_iplist
@@ -109,7 +120,7 @@ class ProxyHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self):
 
-        if self.set_user:
+        if self.set_auth:
             auth_header = self.request.headers.get('Authorization', '')
             if not base_auth_valid(auth_header, self.set_user, self.set_pwd):
                 self.set_status(403)
@@ -136,7 +147,7 @@ class ProxyHandler(tornado.web.RequestHandler):
         on_handle_response = self.__on_handle_response
         try:
             fetch_request(
-                self.request, self.set_port, on_handle_response,
+                self.request, client_ip, self.set_proxy_pass, self.set_mode, on_handle_response,
                 method=self.request.method, body=body,
                 headers=self.request.headers, follow_redirects=False,
                 allow_nonstandard_methods=True)
