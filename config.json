@@ -1,0 +1,13 @@
+{
+  "port": ":8080",
+  "proxy_pass": [
+    "127.0.0.1:80"
+  ],
+  "auth": false,
+  "mode": 0,
+  "user": {
+    "name": "proxy",
+    "passwd": "secret"
+  },
+  "white_iplist": []
+}
