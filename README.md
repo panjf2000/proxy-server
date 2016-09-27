@@ -8,7 +8,7 @@ a proxy server by python
 安装：git clone git@github.com:panjf2000/ProxyServer.git
 安装 hash_ring: pip install hash_ring
 
-编写配置文件:
+编写配置文件:  
 {
   "port": "1234",
   "proxy_pass": [
@@ -26,13 +26,13 @@ a proxy server by python
   "white_iplist": []
 }
 
-配置文件释义:
-port           # proxy server监听的端口
-proxy_pass     # 反向代理的服务器
-auth           # 是否开启代理认证
-mode           # 负载策略的模式,目前支持:IP HASH-0 ; 随机选取-1
-user           # 代理认证的用户信息
-white_iplist   # 白名单,若设置,则只有该名单内的ip方可使用此代理服务器
+配置文件释义:  
+port           # proxy server监听的端口  
+proxy_pass     # 反向代理的服务器  
+auth           # 是否开启代理认证  
+mode           # 负载策略的模式,目前支持:IP HASH-0 ; 随机选取-1  
+user           # 代理认证的用户信息  
+white_iplist   # 白名单,若设置,则只有该名单内的ip方可使用此代理服务器  
 
 运行：python proxy_server.py
 
