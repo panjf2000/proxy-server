@@ -29,23 +29,23 @@
 ```
 
 ## 配置文件释义:  
-port           # proxy server监听的端口  
-proxy_pass     # 反向代理的服务器  
-auth           # 是否开启代理认证  
-mode           # 负载策略的模式,目前支持:IP HASH-0 ; 随机选取-1  
-user           # 代理认证的用户信息  
-white_iplist   # 白名单,若设置,则只有该名单内的ip方可使用此代理服务器  
+- port           # proxy server监听的端口  
+- proxy_pass     # 反向代理的服务器  
+- auth           # 是否开启代理认证  
+- mode           # 负载策略的模式,目前支持:IP HASH-0 ; 随机选取-1  
+- user           # 代理认证的用户信息  
+- white_iplist   # 白名单,若设置,则只有该名单内的ip方可使用此代理服务器  
 
 **运行：python proxy_server.py**
 
 
 ## 项目结构：
 
-ProxyServer/proxy_server.py        #server入口
+>* ProxyServer/proxy_server.py        #server入口
 
-ProxyServer/handler/               #tornado的转发类，负责转发请求以及处理response的数据
+>* ProxyServer/handler/               #tornado的转发类，负责转发请求以及处理response的数据
 
-ProxyServer/custom_handler/        
+>* ProxyServer/custom_handler/        
 
 ## 二次开发：
 
