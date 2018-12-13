@@ -28,7 +28,6 @@ def run_proxy(port=8888, handler=proxy_handler.ProxyHandler, start_ioloop=True):
 
 
 if __name__ == '__main__':
-
     config = dict()
     read_conf('config.json')
     print ("Start a HTTP proxy on port %d" % config.get('port', 80))
