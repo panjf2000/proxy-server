@@ -5,8 +5,8 @@
 
 ## 依赖：python2.7或者python3.5，tornado4.x
 
->安装：git clone git@github.com:panjf2000/ProxyServer.git
->安装 hash_ring: pip install hash_ring
+- git clone git@github.com:panjf2000/ProxyServer.git
+- hash_ring: pip install hash_ring
 
 编写配置文件:  
 ```
